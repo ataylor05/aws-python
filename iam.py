@@ -1,4 +1,5 @@
 import iamFunctions as iam
+import json
 
 # Create user with console access and add to new group
 new_group = iam.create_group("user1")
