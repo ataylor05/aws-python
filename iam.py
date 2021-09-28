@@ -40,3 +40,20 @@ policy = {
 }
 json_policy = json.dumps(policy, indent = 4) 
 iam.create_policy("example", json_policy, description="Example policy")
+
+# Create an IAM role and attach policy
+trust_policy = {
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+json_trust_policy = json.dumps(trust_policy, indent = 4) 
+new_role = iam.create_role("ec2-access", json_trust_policy)
+iam.attach_policy_to_role(new_role["RoleName"], "arn:aws:iam::aws:policy/AmazonS3FullAccess")
