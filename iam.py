@@ -57,3 +57,31 @@ trust_policy = {
 json_trust_policy = json.dumps(trust_policy, indent = 4) 
 new_role = iam.create_role("ec2-access", json_trust_policy)
 iam.attach_policy_to_role(new_role["RoleName"], "arn:aws:iam::aws:policy/AmazonS3FullAccess")
+
+# Create AD identity provider
+with open('FederationMetadata.xml', 'r') as file:
+    saml_data = file.read().replace('\n', '')
+ad_provider = iam.create_saml_provider("Active-Directory-ADFS", saml_data, tags=[])
+ad_provider_arn = ad_provider["SAMLProviderArn"]
+
+# Create role for federation
+trust_policy = {
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "{ad_provider_arn}"
+      },
+      "Action": "sts:AssumeRoleWithSAML",
+      "Condition": {
+        "StringEquals": {
+          "SAML:aud": "https://signin.aws.amazon.com/saml"
+        }
+      }
+    }
+  ]
+}
+json_trust_policy = json.dumps(trust_policy, indent = 4) 
+iam.create_role("CompanyName-Admins", json_trust_policy, description="Role SAML users will assume")
+iam.attach_policy_to_role("ADFS-SAML-Admins-Role", "arn:aws:iam::aws:policy/AdministratorAccess")
