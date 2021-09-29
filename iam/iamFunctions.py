@@ -110,3 +110,21 @@ def create_saml_provider(name, saml_data, tags=[]):
         )
         return response
     except Exception as error: print(error)
+
+def create_instance_profile(name, path="/", tags=[]):
+    try:
+        response = client.create_instance_profile(
+            InstanceProfileName=name,
+            Path=path,
+            Tags=tags
+        )
+        return response["InstanceProfile"]
+    except Exception as error: print(error)
+
+def add_role_to_instance_profile(instance_profile_name, role_name):
+    try:
+        client.add_role_to_instance_profile(
+            InstanceProfileName=instance_profile_name,
+            RoleName=role_name
+        )
+    except Exception as error: print(error)

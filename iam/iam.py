@@ -85,3 +85,22 @@ trust_policy = {
 json_trust_policy = json.dumps(trust_policy, indent = 4) 
 iam.create_role("CompanyName-Admins", json_trust_policy, description="Role SAML users will assume")
 iam.attach_policy_to_role("ADFS-SAML-Admins-Role", "arn:aws:iam::aws:policy/AdministratorAccess")
+
+# Create EC2 instance profile
+trust_policy = {
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+json_trust_policy = json.dumps(trust_policy, indent = 4) 
+new_role = iam.create_role("EC2-S3-Access", json_trust_policy, description="Instance profile role for S3.")
+iam.attach_policy_to_role(new_role["RoleName"], "arn:aws:iam::aws:policy/AmazonS3FullAccess")
+new_ip = iam.create_instance_profile("EC2-S3-Access")
+iam.add_role_to_instance_profile(new_ip["InstanceProfileName"], new_role["RoleName"])
