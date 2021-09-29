@@ -6,10 +6,9 @@ Add-WindowsFeature -IncludeManagementTools -Name ADFS-Federation
 Import-Module ActiveDirectory
 Import-Module ADFS
 
-
 $domain = Get-ADDomain
 $dns_root = $domain.DNSRoot
-$fqdn = "something." + $dns_root
+$fqdn = "adfs." + $dns_root
 
 $domain_admin_credential = Get-Credential
 
