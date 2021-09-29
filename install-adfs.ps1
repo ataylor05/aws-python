@@ -55,5 +55,5 @@ Set-AdfsProperties -EnableIdPInitiatedSignonPage $true
 # 4. Claim rule template - Send claims using a custom rule
 # Name: Roles
 # Custom rule:
-# c:[Type == "http://TEOKYLLC/groups", Value =~ "(?i)^AWS-012901486517-Admins"] => issue(Type = "https://aws.amazon.com/SAML/Attributes/Role", Value = RegExReplace(c.Value, "AWS-012901486517-Admins", "arn:aws:iam::012901486517:saml-provider/ADFS,arn:aws:iam::012901486517:role/TEOKYLLC-Admins"));
+# c:[Type == "http://TEOKYLLC/groups", Value =~ "(?i)^AWS-1111111111-Admins"] => issue(Type = "https://aws.amazon.com/SAML/Attributes/Role", Value = RegExReplace(c.Value, "AWS-1111111111-Admins", "arn:aws:iam::1111111111:saml-provider/ADFS,arn:aws:iam::1111111111:role/TEOKYLLC-Admins"));
 #                                                     ^ AD group name                                                                                                         ^ AD group name            ^ SAML provider ARN                          ^ User role being assumed ARN
