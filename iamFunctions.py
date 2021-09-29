@@ -101,4 +101,12 @@ def create_policy(name, document, description="", path="/", tags=[]):
         return response["Policy"]
     except Exception as error: print(error)
 
-    
+def create_saml_provider(name, saml_data, tags=[]):
+    try:
+        response = client.create_saml_provider(
+            SAMLMetadataDocument=saml_data,
+            Name=name,
+            Tags=tags
+        )
+        return response
+    except Exception as error: print(error)
